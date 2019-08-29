@@ -1,8 +1,5 @@
-import math
-
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
 from a2c_ppo_acktr.utils import AddBias, init
 
@@ -32,7 +29,7 @@ FixedNormal = torch.distributions.Normal
 log_prob_normal = FixedNormal.log_prob
 FixedNormal.log_probs = lambda self, actions: log_prob_normal(
     self, actions).sum(
-        -1, keepdim=True)
+    -1, keepdim=True)
 
 normal_entropy = FixedNormal.entropy
 FixedNormal.entropy = lambda self: normal_entropy(self).sum(-1)

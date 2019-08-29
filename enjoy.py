@@ -3,10 +3,9 @@ import os
 # workaround to unpickle olf model files
 import sys
 
-import numpy as np
 import torch
 
-from a2c_ppo_acktr.envs import VecPyTorch, make_vec_envs
+from a2c_ppo_acktr.envs import make_vec_envs
 from a2c_ppo_acktr.utils import get_render_func, get_vec_normalize
 
 sys.path.append('a2c_ppo_acktr')
@@ -50,7 +49,7 @@ render_func = get_render_func(env)
 
 # We need to use the same statistics for normalization as used in training
 actor_critic, ob_rms = \
-            torch.load(os.path.join(args.load_dir, args.env_name + ".pt"))
+    torch.load(os.path.join(args.load_dir, args.env_name + ".pt"))
 
 vec_norm = get_vec_normalize(env)
 if vec_norm is not None:

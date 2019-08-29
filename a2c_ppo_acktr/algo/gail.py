@@ -1,12 +1,10 @@
-import h5py
 import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils.data
-from torch import autograd
-
 from baselines.common.running_mean_std import RunningMeanStd
+from torch import autograd
 
 
 class Discriminator(nn.Module):
@@ -114,16 +112,16 @@ class Discriminator(nn.Module):
 class ExpertDataset(torch.utils.data.Dataset):
     def __init__(self, file_name, num_trajectories=4, subsample_frequency=20):
         all_trajectories = torch.load(file_name)
-        
+
         perm = torch.randperm(all_trajectories['states'].size(0))
         idx = perm[:num_trajectories]
 
         self.trajectories = {}
-        
+
         # See https://github.com/pytorch/pytorch/issues/14886
         # .long() for fixing bug in torch v0.4.1
         start_idx = torch.randint(
-            0, subsample_frequency, size=(num_trajectories, )).long()
+            0, subsample_frequency, size=(num_trajectories,)).long()
 
         for k, v in all_trajectories.items():
             data = v[idx]
@@ -138,16 +136,16 @@ class ExpertDataset(torch.utils.data.Dataset):
 
         self.i2traj_idx = {}
         self.i2i = {}
-        
+
         self.length = self.trajectories['lengths'].sum().item()
 
         traj_idx = 0
         i = 0
 
         self.get_idx = []
-        
+
         for j in range(self.length):
-            
+
             while self.trajectories['lengths'][traj_idx].item() <= i:
                 i -= self.trajectories['lengths'][traj_idx].item()
                 traj_idx += 1
@@ -155,8 +153,7 @@ class ExpertDataset(torch.utils.data.Dataset):
             self.get_idx.append((traj_idx, i))
 
             i += 1
-            
-            
+
     def __len__(self):
         return self.length
 

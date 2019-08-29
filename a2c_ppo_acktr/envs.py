@@ -3,8 +3,6 @@ import os
 import gym
 import numpy as np
 import torch
-from gym.spaces.box import Box
-
 from baselines import bench
 from baselines.common.atari_wrappers import make_atari, wrap_deepmind
 from baselines.common.vec_env import VecEnvWrapper
@@ -12,6 +10,7 @@ from baselines.common.vec_env.dummy_vec_env import DummyVecEnv
 from baselines.common.vec_env.shmem_vec_env import ShmemVecEnv
 from baselines.common.vec_env.vec_normalize import \
     VecNormalize as VecNormalize_
+from gym.spaces.box import Box
 
 try:
     import dm_control2gym
@@ -222,7 +221,7 @@ class VecPyTorchFrameStack(VecEnvWrapper):
 
         if device is None:
             device = torch.device('cpu')
-        self.stacked_obs = torch.zeros((venv.num_envs, ) +
+        self.stacked_obs = torch.zeros((venv.num_envs,) +
                                        low.shape).to(device)
 
         observation_space = gym.spaces.Box(
